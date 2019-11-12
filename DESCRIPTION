@@ -1,11 +1,11 @@
 Package: cbq
 Title: An R package for conditional binary quantile models
-Version: 0.0.0.9000
+Version: 0.1
 Authors@R: 
     person(given = "Xiao",
            family = "Lu",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
+           email = "xiao.lu@gess.uni-mannheim.de")
 Description: The package provides the basic functionalities of conditional binary quantile models
 License: MIT
 Encoding: UTF-8

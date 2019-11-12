@@ -9,8 +9,7 @@ cbq(formula, data, q = NULL, nsim = 1000, burnin = NULL, thin = 1,
   offset = 1e-20)
 }
 \arguments{
-\item{formula}{An object of class "formula" (or one that can be
-coerced to that class): a symbolic description of the model to be fitted.}
+\item{formula}{An object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
 
 \item{data}{A data frame containing the variables in the model.}
 
@@ -32,6 +31,35 @@ coerced to that class): a symbolic description of the model to be fitted.}
 
 \item{offset}{Offset values to enhance sampling stability. The default value is 1e-20.}
 }
+\value{
+A \code{cbq} object, which can be further analyzed with its associated \code{\link{plot.cbq}}, \code{\link{coef.cbq}} and \code{\link{print.cbq}} functions.
+
+An object of class \code{cbq} contains the following elements
+
+  \describe{
+
+  \item{\code{Call}}{The matched call.}
+  \item{\code{formula}}{Symbolic representation of the model.}
+  \item{\code{q}}{The quantile value.}
+  \item{\code{nsim}}{The number of MCMC iterations.}
+  \item{\code{burnin}}{The number of burnin periods.}
+  \item{\code{thin}}{Thinning.}
+  \item{\code{seeds}}{Random seeds.}
+  \item{\code{CIsize}}{The size of confidence interval.}
+  \item{\code{data}}{Data used.}
+  \item{\code{x}}{Covaraites used.}
+  \item{\code{y}}{The dependent variable.}
+  \item{\code{xnames}}{Names of the covariates.}
+  \item{\code{stanfit}}{Outputs from stan.}
+  \item{\code{sampledf}}{A matrix of posterior samples.}
+  \item{\code{summaryout}}{A summary based on posterior samples.}
+  \item{\code{npars}}{Number of covariates.}
+  \item{\code{ulbs}}{Lower and upper confidence bounds.}
+  \item{\code{means}}{Estimates at the mean.}
+
+
+}
+}
 \description{
 The main function for running the conditional binary quantile model. The function returns a cbq \code{cbq} object that can be further investigated using standard functions such as \code{plot}, \code{print}, \code{coef}, and \code{predict}.
 }
@@ -41,10 +69,27 @@ The model can be passed either as a combination of a \code{formula} and a data f
 Convergence diagnotics can be performed using either \code{print(object, "mcmc")} or \code{plot(object, "mcmc")}.
 }
 \examples{
+# Simulate the data
+x <- rnorm(50)
+y <- ifelse(x > 0, 1, 0)
+dat <- as.data.frame(cbind(y, x))
 
+# Estimate the CBQ model
+model <- cbq(y ~ x, dat, 0.5, inverse_distr = FALSE, nsim = 1000)
+
+# Show the results
+print(model)
+coef(model)
+plot(model)
 
 
 }
+\references{
+Lu, Xiao (forthcoming). Discrete Choice Data with Unobserved Heterogeneity: A Conditional Binary Quantile Model. Political Analysis. https://doi.org/10.1017/pan.2019.29
+}
 \seealso{
 
+}
+\author{
+Xiao Lu
 }
