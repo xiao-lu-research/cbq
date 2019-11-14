@@ -17,10 +17,3 @@ A table of coefficients with their corresponding lower and upper bounds.
 \description{
 Create a table of coefficient results from a \code{cbq} object.
 }
-\examples{
-
-dat <- gencirque()
-model   <- cirque(y ~ ., dat)
-coef(model)
-
-}

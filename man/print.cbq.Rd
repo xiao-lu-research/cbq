@@ -4,10 +4,10 @@
 \alias{print.cbq}
 \title{Print cbq object}
 \usage{
-\method{print}{cbq}(object, type = "text", ...)
+\method{print}{cbq}(x, type = "text", ...)
 }
 \arguments{
-\item{object}{A \code{cbq} object to be printed.}
+\item{x}{A \code{cbq} object to be printed.}
 
 \item{type}{Character string giving the type of printing, such as
 \code{"text"}, \code{"mcmc"}, \code{"coef"}.}
@@ -17,8 +17,4 @@
 \description{
 General print function for \code{cbq} objects, which dispatches the chosen type
 of printing to the corresponding function.
-}
-\examples{
-
-
 }

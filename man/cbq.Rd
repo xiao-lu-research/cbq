@@ -9,7 +9,7 @@ cbq(formula, data, q = NULL, nsim = 1000, burnin = NULL, thin = 1,
   offset = 1e-20)
 }
 \arguments{
-\item{formula}{An object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
+\item{formula}{An object of class "Formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
 
 \item{data}{A data frame containing the variables in the model.}
 
@@ -86,9 +86,6 @@ plot(model)
 }
 \references{
 Lu, Xiao (forthcoming). Discrete Choice Data with Unobserved Heterogeneity: A Conditional Binary Quantile Model. Political Analysis. https://doi.org/10.1017/pan.2019.29
-}
-\seealso{
-
 }
 \author{
 Xiao Lu

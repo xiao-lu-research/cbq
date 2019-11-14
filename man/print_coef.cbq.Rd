@@ -14,7 +14,3 @@ print_coef.cbq(object, digits = 3)
 \description{
 Print cbq coefficients
 }
-\examples{
-
-
-}

@@ -14,7 +14,3 @@ print_text.cbq(object, digits = 3)
 \description{
 Print the main results from a \code{cbq} object.
 }
-\examples{
-
-
-}

@@ -14,7 +14,3 @@ plot_trace.cbq(object, ...)
 \description{
 Plot traceplots from a \code{cbq} object.
 }
-\examples{
-
-
-}

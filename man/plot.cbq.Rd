@@ -4,10 +4,10 @@
 \alias{plot.cbq}
 \title{Plot cbq object}
 \usage{
-\method{plot}{cbq}(object, type = "trace", ...)
+\method{plot}{cbq}(x, type = "trace", ...)
 }
 \arguments{
-\item{object}{A \code{cbq} object to be plotted.}
+\item{x}{A \code{cbq} object to be plotted.}
 
 \item{type}{Character string giving the type of plotting. The options are
 \code{"trace"} for trace plots, \code{"coef"} for coefficient plots.}
@@ -17,8 +17,4 @@
 \description{
 General plot function for \code{cbq} objects, which dispatches the chosen
 type of plotting to the corresponding function.
-}
-\examples{
-
-
 }

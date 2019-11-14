@@ -31,7 +31,7 @@ is.dichotomous <- function(x) {
 #'
 #' Convergence diagnotics can be performed using either \code{print(object, "mcmc")} or \code{plot(object, "mcmc")}.
 #'
-#' @param formula An object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
+#' @param formula An object of class "Formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
 #' @param data A data frame containing the variables in the model.
 #' @param q The quantile value.
 #' @param nsim The number of iterations.
@@ -71,6 +71,8 @@ is.dichotomous <- function(x) {
 #'
 #' }
 #'
+#' @importFrom stats aggregate coef model.frame model.matrix quantile
+#'
 #' @export
 #'
 #' @author
@@ -79,7 +81,6 @@ is.dichotomous <- function(x) {
 #' @references
 #' Lu, Xiao (forthcoming). Discrete Choice Data with Unobserved Heterogeneity: A Conditional Binary Quantile Model. Political Analysis. https://doi.org/10.1017/pan.2019.29
 #'
-#' @seealso
 #'
 #' @examples
 #' # Simulate the data
@@ -124,14 +125,14 @@ cbq <- function(formula,
   }
   if (length(q)>1) stop("Only a single quantile value is allowed.")
   if (q>=1 | q<=0) stop("The specified quantile is out of range. The value must be in (0,1).")
-
+  
   f = Formula::Formula(formula)
-  data = model.frame(f,data)
-  y = c(as.matrix(model.frame(f, data)[,1]))
+  data = stats::model.frame(f,data)
+  y = c(as.matrix(stats::model.frame(f, data)[,1]))
 
-  x = model.matrix(f,data)
+  x = stats::model.matrix(f,data)
   if (grepl("\\|",deparse(f))){
-    xq = as.matrix(model.matrix(f,data,rhs = 2)[,-1])
+    xq = as.matrix(stats::model.matrix(f,data,rhs = 2)[,-1])
     nq = dim(xq)[2]
   } else {
     xq = NULL
@@ -146,7 +147,7 @@ cbq <- function(formula,
 
   if (nq == 1) {
       indx = as.integer(as.factor(c(xq)))
-      if (!all( aggregate(y, list(indx), sum)[,2] == 1)){
+      if (!all( stats::aggregate(y, list(indx), sum)[,2] == 1)){
           stop("In each choice set, there must be only one chosen observation. Multiple 1s or all 0s are not allowed in any choice set.")
       }
 
@@ -234,7 +235,7 @@ cbq <- function(formula,
   out$sampledf = sampledf
   out$summaryout = summaryout
   out$npars = n_covariate
-  out$ulbs =  apply(sampledf,2,quantile,probs = c((1-CIsize)/2,1 - (1-CIsize)/2) )
+  out$ulbs =  apply(sampledf,2,stats::quantile,probs = c((1-CIsize)/2,1 - (1-CIsize)/2) )
   out$means = summaryout[1:n_covariate,1]
 
   return(out)

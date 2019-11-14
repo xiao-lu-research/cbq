@@ -14,7 +14,3 @@ plot_coef.cbq(object, ...)
 \description{
 Plot traceplots from a \code{cbq} object.
 }
-\examples{
-
-
-}

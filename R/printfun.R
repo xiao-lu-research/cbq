@@ -10,12 +10,6 @@
 #'
 #' @method coef cbq
 #'
-#' @examples
-#'
-#' dat <- gencirque()
-#' model   <- cirque(y ~ ., dat)
-#' coef(model)
-#'
 coef.cbq <- coefficients.cbq <- function(object, ...) {
     coefmat <- cbind(matrix(object$means,nrow = object$npars),t(object$ulbs))
     row.names(coefmat) = c(object$xnames)
@@ -29,7 +23,7 @@ coef.cbq <- coefficients.cbq <- function(object, ...) {
 #' General print function for \code{cbq} objects, which dispatches the chosen type
 #' of printing to the corresponding function.
 #'
-#' @param object A \code{cbq} object to be printed.
+#' @param x A \code{cbq} object to be printed.
 #' @param type Character string giving the type of printing, such as
 #'   \code{"text"}, \code{"mcmc"}, \code{"coef"}.
 #' @param ... Additional arguments to be passed to print functions.
@@ -38,12 +32,10 @@ coef.cbq <- coefficients.cbq <- function(object, ...) {
 #'
 #'
 #'
-#' @examples
 #'
-#'
-print.cbq <- function(object, type = "text", ...) {
+print.cbq <- function(x, type = "text", ...) {
   printFunName <- paste0("print_", type, ".cbq")
-  do.call(printFunName, args = c(list(object = object), list(...)))
+  do.call(printFunName, args = c(list(object = x), list(...)))
 }
 
 
@@ -54,8 +46,6 @@ print.cbq <- function(object, type = "text", ...) {
 #'
 #' @export
 #'
-#'
-#' @examples
 #'
 #'
 print_text.cbq <- function(object, digits = 3) {
@@ -80,8 +70,6 @@ print_text.cbq <- function(object, digits = 3) {
 #' @export
 #'
 #'
-#' @examples
-#'
 #'
 print_mcmc.cbq <- function(object,...) {
   print(object$stanfit,...)
@@ -96,8 +84,6 @@ print_mcmc.cbq <- function(object,...) {
 #'
 #' @export
 #'
-#'
-#' @examples
 #'
 #'
 print_coef.cbq <- function(object, digits = 3) {

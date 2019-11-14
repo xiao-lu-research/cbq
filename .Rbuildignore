@@ -1,2 +1,3 @@
 ^cbq\.Rproj$
 ^\.Rproj\.user$
+.travis.yml

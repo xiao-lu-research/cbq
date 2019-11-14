@@ -14,7 +14,3 @@ print_mcmc.cbq(object, ...)
 \description{
 This prints a number of diagnostics about the results of a \code{cbq} objects
 }
-\examples{
-
-
-}
