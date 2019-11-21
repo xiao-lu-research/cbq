@@ -11,10 +11,11 @@
 #' @method coef cbq
 #'
 coef.cbq <- coefficients.cbq <- function(object, ...) {
-    coefmat <- cbind(matrix(object$means,nrow = object$npars),t(object$ulbs))
-    row.names(coefmat) = c(object$xnames)
-    colnames(coefmat) <- c("Estimate", "LB", "UB")
-    return(coefmat)
+  coefmat <-
+    cbind(matrix(object$means, nrow = object$npars), t(object$ulbs))
+  row.names(coefmat) <- c(object$xnames)
+  colnames(coefmat) <- c("Estimate", "LB", "UB")
+  return(coefmat)
 }
 
 
@@ -51,8 +52,16 @@ print.cbq <- function(x, type = "text", ...) {
 print_text.cbq <- function(object, digits = 3) {
   cat("Conditional binary quantile regression \n")
   cat("\nCall:\n",
-      paste(deparse(object$Call), sep = "\n", collapse = "\n"), "\n\n", sep = "")
-  cat("MCMC run for", object$nsim, "iterations, with", object$stanfit@sim$warmup2, "used. \n\n")
+      paste(deparse(object$Call), sep = "\n", collapse = "\n"),
+      "\n\n",
+      sep = "")
+  cat(
+    "MCMC run for",
+    object$nsim,
+    "iterations, with",
+    object$stanfit@sim$warmup2,
+    "used. \n\n"
+  )
   cat("Coefficients:\n")
   print(round(coef(object), digits))
   cat("\n")
@@ -71,8 +80,8 @@ print_text.cbq <- function(object, digits = 3) {
 #'
 #'
 #'
-print_mcmc.cbq <- function(object,...) {
-  print(object$stanfit,...)
+print_mcmc.cbq <- function(object, ...) {
+  print(object$stanfit, ...)
 }
 
 
@@ -89,6 +98,3 @@ print_mcmc.cbq <- function(object,...) {
 print_coef.cbq <- function(object, digits = 3) {
   print(round(coef(object), digits))
 }
-
-
-

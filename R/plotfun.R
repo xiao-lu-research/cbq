@@ -21,7 +21,7 @@ plot.cbq <- function(x, type = "trace", ...) {
 
 #' Make traceplots for cbq
 #'
-#' Plot traceplots from a \code{cbq} object. 
+#' Plot traceplots from a \code{cbq} object.
 #'
 #' @param object A \code{cbq} object.
 #' @param ... Additional parameters to be passed.
@@ -31,12 +31,12 @@ plot.cbq <- function(x, type = "trace", ...) {
 #'
 #'
 plot_trace.cbq <- function(object, ...) {
-  rstan::traceplot(object$stanfit,...)
+  rstan::traceplot(object$stanfit, ...)
 }
 
 #' Make coefficient plots for cbq
 #'
-#' Plot traceplots from a \code{cbq} object. 
+#' Plot traceplots from a \code{cbq} object.
 #'
 #' @param object A \code{cbq} object.
 #' @param ... Additional parameters to be passed.
@@ -46,5 +46,5 @@ plot_trace.cbq <- function(object, ...) {
 #'
 #'
 plot_coef.cbq <- function(object, ...) {
-  rstan::plot(object$stanfit,...)
+  rstan::plot(object$stanfit, ...)
 }
