@@ -4,9 +4,11 @@
 \alias{cbq}
 \title{Fitting conditional binary quantile models}
 \usage{
-cbq(formula, data, q = NULL, nsim = 1000, burnin = NULL, thin = 1,
-  CIsize = 0.95, nchain = 1, seeds = 12345, inverse_distr = FALSE,
-  offset = 1e-20)
+cbq(formula, data, q = NULL, fixed_var = NULL, random_var = NULL,
+  vi = FALSE, nsim = 1000, grad_samples = 1, elbo_samples = 100,
+  tol_rel_obj = 0.01, output_samples = 2000, burnin = NULL,
+  thin = 1, CIsize = 0.95, nchain = 1, seeds = 12345,
+  inverse_distr = FALSE, offset = 1e-20)
 }
 \arguments{
 \item{formula}{An object of class "Formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
@@ -16,6 +18,14 @@ cbq(formula, data, q = NULL, nsim = 1000, burnin = NULL, thin = 1,
 \item{q}{The quantile value.}
 
 \item{nsim}{The number of iterations.}
+
+\item{grad_samples}{Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of gradients, defaulting to 1.}
+
+\item{elbo_samples}{Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of ELBO (objective function), defaulting to 100. (ELBO stands for "the evidence lower bound".)}
+
+\item{tol_rel_obj}{Passed to \code{\link[rstan]{vb}} (positive double), the convergence tolerance on the relative norm of the objective, defaulting to 0.01.}
+
+\item{output_samples}{Passed to \code{\link[rstan]{vb}} (positive integer), number of posterior samples to draw and save, defaults to 1000.}
 
 \item{burnin}{The number of burnin iterations.}
 

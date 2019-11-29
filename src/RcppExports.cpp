@@ -11,12 +11,36 @@ RcppExport SEXP _rcpp_module_boot_stan_fit4cbqb_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4cbqbv_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4cbqd_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4cbqdv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqfixb_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqfixbv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqfixd_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqfixdv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqpanelb_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqpanelbv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqpaneld_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqpaneldv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqrandomb_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqrandombv_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqrandomd_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4cbqrandomdv_mod();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_stan_fit4cbqb_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqb_mod, 0},
     {"_rcpp_module_boot_stan_fit4cbqbv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqbv_mod, 0},
     {"_rcpp_module_boot_stan_fit4cbqd_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqd_mod, 0},
     {"_rcpp_module_boot_stan_fit4cbqdv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqdv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqfixb_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqfixb_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqfixbv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqfixbv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqfixd_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqfixd_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqfixdv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqfixdv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqpanelb_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqpanelb_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqpanelbv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqpanelbv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqpaneld_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqpaneld_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqpaneldv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqpaneldv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqrandomb_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqrandomb_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqrandombv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqrandombv_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqrandomd_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqrandomd_mod, 0},
+    {"_rcpp_module_boot_stan_fit4cbqrandomdv_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4cbqrandomdv_mod, 0},
     {NULL, NULL, 0}
 };
 

@@ -86,7 +86,7 @@ private:
         int D;
         vector_d Y;
         matrix_d X;
-        double p;
+        double q;
         double offset;
 public:
     model_cbqbv(stan::io::var_context& context__,
@@ -157,11 +157,11 @@ public:
                 }
             }
             current_statement_begin__ = 20;
-            context__.validate_dims("data initialization", "p", "double", context__.to_vec());
-            p = double(0);
-            vals_r__ = context__.vals_r("p");
+            context__.validate_dims("data initialization", "q", "double", context__.to_vec());
+            q = double(0);
+            vals_r__ = context__.vals_r("q");
             pos__ = 0;
-            p = vals_r__[pos__++];
+            q = vals_r__[pos__++];
             current_statement_begin__ = 21;
             context__.validate_dims("data initialization", "offset", "double", context__.to_vec());
             offset = double(0);
@@ -257,12 +257,12 @@ public:
                 current_statement_begin__ = 35;
                 if (as_bool(logical_eq(get_base1(Y, i, "Y", 1), 1))) {
                     current_statement_begin__ = 36;
-                    stan::math::assign(lik, ((1 - pald2(-(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), p, pstream__)) + offset));
+                    stan::math::assign(lik, ((1 - pald2(-(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), q, pstream__)) + offset));
                 }
                 current_statement_begin__ = 38;
                 if (as_bool(logical_eq(get_base1(Y, i, "Y", 1), 0))) {
                     current_statement_begin__ = 39;
-                    stan::math::assign(lik, (pald2(-(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), p, pstream__) + offset));
+                    stan::math::assign(lik, (pald2(-(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), q, pstream__) + offset));
                 }
                 current_statement_begin__ = 42;
                 lp_accum__.add(stan::math::log(lik));

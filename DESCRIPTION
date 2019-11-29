@@ -1,8 +1,8 @@
 Package: cbq
 Title: An R package for conditional binary quantile models
-Version: 0.1
+Version: 0.1.0.0
 Author: Xiao Lu
-Maintainer: Xiao LU <xiao.lu@gess.uni-mannheim.de>
+Maintainer: Xiao LU <xiao.lu.research@gmail.com>
 Description: Estimates conditional binary quantile models. The estimation procedure is implemented based on MCMC algorithms. 
 License: MIT + file LICENSE
 Encoding: UTF-8

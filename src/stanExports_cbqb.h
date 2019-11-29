@@ -33,7 +33,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_cbqb");
-    reader.add_event(47, 45, "end", "model_cbqb");
+    reader.add_event(46, 44, "end", "model_cbqb");
     return reader;
 }
 template <typename T0__, typename T1__>
@@ -179,8 +179,6 @@ public:
             current_statement_begin__ = 24;
             validate_non_negative_index("beta", "D", D);
             num_params_r__ += D;
-            current_statement_begin__ = 25;
-            num_params_r__ += 1;
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
             // Next line prevents compiler griping about no return
@@ -215,19 +213,6 @@ public:
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta: ") + e.what()), current_statement_begin__, prog_reader__());
         }
-        current_statement_begin__ = 25;
-        if (!(context__.contains_r("alpha")))
-            stan::lang::rethrow_located(std::runtime_error(std::string("Variable alpha missing")), current_statement_begin__, prog_reader__());
-        vals_r__ = context__.vals_r("alpha");
-        pos__ = 0U;
-        context__.validate_dims("parameter initialization", "alpha", "double", context__.to_vec());
-        double alpha(0);
-        alpha = vals_r__[pos__++];
-        try {
-            writer__.scalar_unconstrain(alpha);
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable alpha: ") + e.what()), current_statement_begin__, prog_reader__());
-        }
         params_r__ = writer__.data_r();
         params_i__ = writer__.data_i();
     }
@@ -260,37 +245,28 @@ public:
                 beta = in__.vector_constrain(D, lp__);
             else
                 beta = in__.vector_constrain(D);
-            current_statement_begin__ = 25;
-            local_scalar_t__ alpha;
-            (void) alpha;  // dummy to suppress unused var warning
-            if (jacobian__)
-                alpha = in__.scalar_constrain(lp__);
-            else
-                alpha = in__.scalar_constrain();
             // model body
             {
-            current_statement_begin__ = 30;
+            current_statement_begin__ = 29;
             local_scalar_t__ lik(DUMMY_VAR__);
             (void) lik;  // dummy to suppress unused var warning
             stan::math::initialize(lik, DUMMY_VAR__);
             stan::math::fill(lik, DUMMY_VAR__);
             current_statement_begin__ = 31;
-            lp_accum__.add(normal_log<propto__>(alpha, 0, 10));
-            current_statement_begin__ = 32;
             lp_accum__.add(normal_log<propto__>(beta, 0, 10));
-            current_statement_begin__ = 34;
+            current_statement_begin__ = 33;
             for (int i = 1; i <= N; ++i) {
-                current_statement_begin__ = 35;
+                current_statement_begin__ = 34;
                 if (as_bool(logical_eq(get_base1(Y, i, "Y", 1), 1))) {
-                    current_statement_begin__ = 36;
-                    stan::math::assign(lik, (pald2((alpha + dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), q, pstream__) + offset));
+                    current_statement_begin__ = 35;
+                    stan::math::assign(lik, (pald2(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta), q, pstream__) + offset));
                 }
-                current_statement_begin__ = 38;
+                current_statement_begin__ = 37;
                 if (as_bool(logical_eq(get_base1(Y, i, "Y", 1), 0))) {
-                    current_statement_begin__ = 39;
-                    stan::math::assign(lik, ((1 - pald2((alpha + dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta)), q, pstream__)) + offset));
+                    current_statement_begin__ = 38;
+                    stan::math::assign(lik, ((1 - pald2(dot_product(stan::model::rvalue(X, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X"), beta), q, pstream__)) + offset));
                 }
-                current_statement_begin__ = 41;
+                current_statement_begin__ = 40;
                 lp_accum__.add(stan::math::log(lik));
             }
             }
@@ -315,15 +291,12 @@ public:
     void get_param_names(std::vector<std::string>& names__) const {
         names__.resize(0);
         names__.push_back("beta");
-        names__.push_back("alpha");
     }
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
         dimss__.resize(0);
         std::vector<size_t> dims__;
         dims__.resize(0);
         dims__.push_back(D);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
         dimss__.push_back(dims__);
     }
     template <typename RNG>
@@ -345,8 +318,6 @@ public:
         for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
             vars__.push_back(beta(j_1__));
         }
-        double alpha = in__.scalar_constrain();
-        vars__.push_back(alpha);
         double lp__ = 0.0;
         (void) lp__;  // dummy to suppress unused var warning
         stan::math::accumulator<double> lp_accum__;
@@ -392,9 +363,6 @@ public:
             param_name_stream__ << "beta" << '.' << j_1__ + 1;
             param_names__.push_back(param_name_stream__.str());
         }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "alpha";
-        param_names__.push_back(param_name_stream__.str());
         if (!include_gqs__ && !include_tparams__) return;
         if (include_tparams__) {
         }
@@ -410,9 +378,6 @@ public:
             param_name_stream__ << "beta" << '.' << j_1__ + 1;
             param_names__.push_back(param_name_stream__.str());
         }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "alpha";
-        param_names__.push_back(param_name_stream__.str());
         if (!include_gqs__ && !include_tparams__) return;
         if (include_tparams__) {
         }

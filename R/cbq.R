@@ -39,6 +39,10 @@ is.dichotomous <- function(x) {
 #' @param data A data frame containing the variables in the model.
 #' @param q The quantile value.
 #' @param nsim The number of iterations.
+#' @param grad_samples Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of gradients, defaulting to 1.
+#' @param elbo_samples Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of ELBO (objective function), defaulting to 100. (ELBO stands for "the evidence lower bound".)
+#' @param tol_rel_obj Passed to \code{\link[rstan]{vb}} (positive double), the convergence tolerance on the relative norm of the objective, defaulting to 0.01.
+#' @param output_samples Passed to \code{\link[rstan]{vb}} (positive integer), number of posterior samples to draw and save, defaults to 1000.
 #' @param burnin The number of burnin iterations.
 #' @param thin Thinning parameter.
 #' @param CIsize The size of confidence interval.
@@ -104,8 +108,14 @@ is.dichotomous <- function(x) {
 cbq <- function(formula,
                 data,
                 q = NULL,
-                # quantile
+                fixed_var = NULL,
+                random_var = NULL,
+                vi = FALSE,
                 nsim = 1000,
+                grad_samples = 1,
+                elbo_samples = 100,
+                tol_rel_obj = 0.01,
+                output_samples = 2000,
                 burnin = NULL,
                 thin = 1,
                 CIsize = .95,
@@ -165,78 +175,316 @@ cbq <- function(formula,
         "In each choice set, there must be only one chosen observation. Multiple 1s or all 0s are not allowed in any choice set."
       )
     }
-
+  }
+  
+  
+  if (is.null(fixed_var) & is.null(random_var)){
+      type = "regular"
+  } else if (is.null(fixed_var)) {
+      random_var = as.integer(as.factor(random_var))
+      if (length(unique(random_var)) < 2) {
+          stop("The value of the random indicator is unique.")
+      }
+      type = "random"
+  } else if (is.null(random_var)){
+      fixed_var = as.integer(as.factor(fixed_var))
+      if (length(unique(fixed_var)) < 2) {
+          stop("The value of the fixed indicator is unique.")
+      }
+      type = "fixed"
+  } else {
+      random_var = as.integer(as.factor(random_var))
+      fixed_var = as.integer(as.factor(fixed_var))
+      if (length(unique(fixed_var)) < 2) {
+          stop("The value of the fixed indicator is unique.")
+      }
+      if (length(unique(random_var)) < 2) {
+          stop("The value of the random indicator is unique.")
+      }
+      type = "panel"
   }
 
   if (nq == 0) {
     if (inverse_distr == FALSE) {
-      stanmodel <- stanmodels$cbqbv
-      datlist <- list(
-        N = N,
-        Y = c(y),
-        D = n_covariate,
-        X = x,
-        p = q,
-        offset = offset
-      )
-
+        if (type == "regular") {
+            stanmodel <- stanmodels$cbqbv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset
+            )
+        } else if (type == "random") {
+            stanmodel = stanmodels$cbqrandombv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        } else if (type == "fixed") {
+            stanmodel = stanmodels$cbqfixbv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        } else {
+            stanmodel = stanmodels$cbqpanelbv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        }
     } else {
-      stanmodel <- stanmodels$cbqb
-      datlist <- list(
-        N = N,
-        Y = c(y),
-        D = n_covariate,
-        X = x,
-        p = q,
-        offset = offset
-      )
-
+        if (type == "regular") {
+            stanmodel <- stanmodels$cbqb
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset
+            )
+        } else if (type == "random") {
+            stanmodel = stanmodels$cbqrandomb
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        } else if (type == "fixed") {
+            stanmodel = stanmodels$cbqfixb
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        } else {
+            stanmodel = stanmodels$cbqpanelb
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D = n_covariate,
+            X = x,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        }
     }
   } else {
     if (inverse_distr == FALSE) {
-      x <- x[order(indx, y), ]
-      y <- y[order(indx, y)]
-      stanmodel <- stanmodels$cbqdv
-      datlist <- list(
-        N = N,
-        Y = c(y),
-        D_common = n_covariate,
-        X_common = x,
-        N_indx = length(unique(indx)),
-        ind = indx,
-        q = q,
-        offset = offset
-      )
+        if (type == "regular") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            stanmodel <- stanmodels$cbqdv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset
+            )
+        } else if (type == "random") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            random_var = random_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqrandomdv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        } else if (type == "fixed") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            fixed_var = fixed_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqfixdv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        } else {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            fixed_var = fixed_var[order(indx, y)]
+            random_var = random_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqpaneldv
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        }
 
     } else {
-      x <- x[order(indx, y), ]
-      y <- y[order(indx, y)]
-      stanmodel <- stanmodels$cbqd
-      datlist <- list(
-        N = N,
-        Y = c(y),
-        D_common = n_covariate,
-        X_common = x,
-        N_indx = length(unique(indx)),
-        ind = indx,
-        q = q,
-        offset = offset
-      )
+        if (type == "regular") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            stanmodel <- stanmodels$cbqd
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset
+            )
+        } else if (type == "random") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            random_var = random_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqrandomd
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var
+            )
+        } else if (type == "fixed") {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            fixed_var = fixed_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqfixd
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        } else {
+            x <- x[order(indx, y), ]
+            y <- y[order(indx, y)]
+            fixed_var = fixed_var[order(indx, y)]
+            random_var = random_var[order(indx, y)]
+            stanmodel <- stanmodels$cbqpaneld
+            datlist <- list(
+            N = N,
+            Y = c(y),
+            D_common = n_covariate,
+            X_common = x,
+            N_indx = length(unique(indx)),
+            ind = indx,
+            q = q,
+            offset = offset,
+            N_person = length(unique(random_var)),
+            person = random_var,
+            N_wave = length(unique(fixed_var)),
+            wave = fixed_var
+            )
+        }
 
     }
   }
 
-  pars <- "beta"
-  stanout <- sampling(
-    stanmodel,
-    data = datlist,
-    pars = pars,
-    seed = seeds,
-    iter = nsim,
-    thin = thin,
-    warmup = burnin,
-    chains = nchain
-  )
+  if (type == "regular") {
+     pars <- "beta"
+  } else if (type == "random") {
+     pars <- c("beta","beta_ind","sigma_beta_ind")
+  } else if (type == "fixed") {
+     pars <- c("beta","beta_wave")
+  } else {
+     pars <- c("beta","beta_ind","sigma_beta_ind","beta_wave")
+  }
+  
+  if (vi == FALSE) {
+      stanout <- rstan::sampling(
+      stanmodel,
+      data = datlist,
+      pars = pars,
+      seed = seeds,
+      iter = nsim,
+      thin = thin,
+      warmup = burnin,
+      chains = nchain
+      )
+  } else {
+      stanout <- rstan::vb(
+      stanmodel,
+      data = datlist,
+      pars = pars,
+      seed = seeds,
+      grad_samples = grad_samples,
+      elbo_samples = elbo_samples,
+      tol_rel_obj = tol_rel_obj,
+      output_samples = output_samples
+      )
+  }
 
   summaryout <- rstan::summary(stanout)$summary
   sampledf <- as.data.frame(stanout)[, 1:n_covariate]

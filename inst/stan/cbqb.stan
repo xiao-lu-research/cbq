@@ -22,21 +22,20 @@ data {
 
 parameters {
   vector[D] beta;
-  real alpha;
 
 }
 
 model{
   real lik;
-  alpha ~ normal(0,10);
+  // alpha ~ normal(0,10);
   beta ~ normal(0,10);
 
   for (i in 1:N){
     if (Y[i] == 1){
-      lik = pald2((alpha + dot_product(X[i,],beta)),q) + offset;  
+      lik = pald2((dot_product(X[i,],beta)),q) + offset;  
     }
     if (Y[i] == 0){
-      lik = 1 - pald2((alpha + dot_product(X[i,],beta)),q) + offset;  
+      lik = 1 - pald2((dot_product(X[i,],beta)),q) + offset;  
     }
     target += log(lik);
   }
