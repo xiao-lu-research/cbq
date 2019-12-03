@@ -65,7 +65,7 @@ transformed data{
 }
 
 parameters {
-	vector[D_common] beta_common;
+	vector[D_common] beta;
   vector[N_person] beta_ind;
   // vector[N_wave] beta_wave;
   real<lower=0> sigma_beta_ind;
@@ -82,14 +82,14 @@ model{
   
   sigma_beta_ind ~ cauchy(0,1);
 
-	beta_common ~ normal(0,10);
+	beta ~ normal(0,10);
   beta_ind ~ normal(0,sigma_beta_ind);
   // beta_wave ~ normal(0,10);
 
   
 
   	for (i in 1:N){
-  		xb_common[i] = X_common[i,]*beta_common + beta_ind[person[i]]; // + beta_wave[wave[i]];
+  		xb_common[i] = X_common[i,]*beta + beta_ind[person[i]]; // + beta_wave[wave[i]];
   	}
   	
 	pos = 1;

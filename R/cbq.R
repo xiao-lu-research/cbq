@@ -38,6 +38,9 @@ is.dichotomous <- function(x) {
 #' @param formula An object of class "Formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
 #' @param data A data frame containing the variables in the model.
 #' @param q The quantile value.
+#' @param fixed_var Variable of fixed intercepts.
+#' @param random_var Variable of random intercepts.
+#' @param vi Indicating whether variantional inference should be used instead of MCMC sampling procedure.
 #' @param nsim The number of iterations.
 #' @param grad_samples Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of gradients, defaulting to 1.
 #' @param elbo_samples Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of ELBO (objective function), defaulting to 100. (ELBO stands for "the evidence lower bound".)
@@ -511,6 +514,11 @@ cbq <- function(formula,
     apply(sampledf, 2, stats::quantile, probs = c((1 - CIsize) / 2, 1 - (1 -
                                                                            CIsize) / 2))
   out$means <- summaryout[1:n_covariate, 1]
+  out$vi <- vi
+  out$output_samples <- output_samples
+  out$fixed_var <- fixed_var
+  out$random_var <- random_var
+  out$xq = xq
 
   return(out)
 

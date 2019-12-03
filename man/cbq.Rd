@@ -17,6 +17,12 @@ cbq(formula, data, q = NULL, fixed_var = NULL, random_var = NULL,
 
 \item{q}{The quantile value.}
 
+\item{fixed_var}{Variable of fixed intercepts.}
+
+\item{random_var}{Variable of random intercepts.}
+
+\item{vi}{Indicating whether variantional inference should be used instead of MCMC sampling procedure.}
+
 \item{nsim}{The number of iterations.}
 
 \item{grad_samples}{Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of gradients, defaulting to 1.}

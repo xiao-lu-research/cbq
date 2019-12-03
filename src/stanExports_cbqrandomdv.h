@@ -326,7 +326,7 @@ public:
             num_params_r__ = 0U;
             param_ranges_i__.clear();
             current_statement_begin__ = 68;
-            validate_non_negative_index("beta_common", "D_common", D_common);
+            validate_non_negative_index("beta", "D_common", D_common);
             num_params_r__ += D_common;
             current_statement_begin__ = 69;
             validate_non_negative_index("beta_ind", "N_person", N_person);
@@ -351,21 +351,21 @@ public:
         std::vector<double> vals_r__;
         std::vector<int> vals_i__;
         current_statement_begin__ = 68;
-        if (!(context__.contains_r("beta_common")))
-            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_common missing")), current_statement_begin__, prog_reader__());
-        vals_r__ = context__.vals_r("beta_common");
+        if (!(context__.contains_r("beta")))
+            stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta missing")), current_statement_begin__, prog_reader__());
+        vals_r__ = context__.vals_r("beta");
         pos__ = 0U;
-        validate_non_negative_index("beta_common", "D_common", D_common);
-        context__.validate_dims("parameter initialization", "beta_common", "vector_d", context__.to_vec(D_common));
-        Eigen::Matrix<double, Eigen::Dynamic, 1> beta_common(D_common);
-        size_t beta_common_j_1_max__ = D_common;
-        for (size_t j_1__ = 0; j_1__ < beta_common_j_1_max__; ++j_1__) {
-            beta_common(j_1__) = vals_r__[pos__++];
+        validate_non_negative_index("beta", "D_common", D_common);
+        context__.validate_dims("parameter initialization", "beta", "vector_d", context__.to_vec(D_common));
+        Eigen::Matrix<double, Eigen::Dynamic, 1> beta(D_common);
+        size_t beta_j_1_max__ = D_common;
+        for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
+            beta(j_1__) = vals_r__[pos__++];
         }
         try {
-            writer__.vector_unconstrain(beta_common);
+            writer__.vector_unconstrain(beta);
         } catch (const std::exception& e) {
-            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_common: ") + e.what()), current_statement_begin__, prog_reader__());
+            stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta: ") + e.what()), current_statement_begin__, prog_reader__());
         }
         current_statement_begin__ = 69;
         if (!(context__.contains_r("beta_ind")))
@@ -423,12 +423,12 @@ public:
             stan::io::reader<local_scalar_t__> in__(params_r__, params_i__);
             // model parameters
             current_statement_begin__ = 68;
-            Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> beta_common;
-            (void) beta_common;  // dummy to suppress unused var warning
+            Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> beta;
+            (void) beta;  // dummy to suppress unused var warning
             if (jacobian__)
-                beta_common = in__.vector_constrain(D_common, lp__);
+                beta = in__.vector_constrain(D_common, lp__);
             else
-                beta_common = in__.vector_constrain(D_common);
+                beta = in__.vector_constrain(D_common);
             current_statement_begin__ = 69;
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> beta_ind;
             (void) beta_ind;  // dummy to suppress unused var warning
@@ -457,7 +457,7 @@ public:
             current_statement_begin__ = 83;
             lp_accum__.add(cauchy_log<propto__>(sigma_beta_ind, 0, 1));
             current_statement_begin__ = 85;
-            lp_accum__.add(normal_log<propto__>(beta_common, 0, 10));
+            lp_accum__.add(normal_log<propto__>(beta, 0, 10));
             current_statement_begin__ = 86;
             lp_accum__.add(normal_log<propto__>(beta_ind, 0, sigma_beta_ind));
             current_statement_begin__ = 91;
@@ -465,7 +465,7 @@ public:
                 current_statement_begin__ = 92;
                 stan::model::assign(xb_common, 
                             stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
-                            (multiply(stan::model::rvalue(X_common, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X_common"), beta_common) + get_base1(beta_ind, get_base1(person, i, "person", 1), "beta_ind", 1)), 
+                            (multiply(stan::model::rvalue(X_common, stan::model::cons_list(stan::model::index_uni(i), stan::model::cons_list(stan::model::index_omni(), stan::model::nil_index_list())), "X_common"), beta) + get_base1(beta_ind, get_base1(person, i, "person", 1), "beta_ind", 1)), 
                             "assigning variable xb_common");
             }
             current_statement_begin__ = 95;
@@ -570,7 +570,7 @@ public:
     }
     void get_param_names(std::vector<std::string>& names__) const {
         names__.resize(0);
-        names__.push_back("beta_common");
+        names__.push_back("beta");
         names__.push_back("beta_ind");
         names__.push_back("sigma_beta_ind");
     }
@@ -600,10 +600,10 @@ public:
         static const char* function__ = "model_cbqrandomdv_namespace::write_array";
         (void) function__;  // dummy to suppress unused var warning
         // read-transform, write parameters
-        Eigen::Matrix<double, Eigen::Dynamic, 1> beta_common = in__.vector_constrain(D_common);
-        size_t beta_common_j_1_max__ = D_common;
-        for (size_t j_1__ = 0; j_1__ < beta_common_j_1_max__; ++j_1__) {
-            vars__.push_back(beta_common(j_1__));
+        Eigen::Matrix<double, Eigen::Dynamic, 1> beta = in__.vector_constrain(D_common);
+        size_t beta_j_1_max__ = D_common;
+        for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
+            vars__.push_back(beta(j_1__));
         }
         Eigen::Matrix<double, Eigen::Dynamic, 1> beta_ind = in__.vector_constrain(N_person);
         size_t beta_ind_j_1_max__ = N_person;
@@ -651,10 +651,10 @@ public:
                                  bool include_tparams__ = true,
                                  bool include_gqs__ = true) const {
         std::stringstream param_name_stream__;
-        size_t beta_common_j_1_max__ = D_common;
-        for (size_t j_1__ = 0; j_1__ < beta_common_j_1_max__; ++j_1__) {
+        size_t beta_j_1_max__ = D_common;
+        for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
             param_name_stream__.str(std::string());
-            param_name_stream__ << "beta_common" << '.' << j_1__ + 1;
+            param_name_stream__ << "beta" << '.' << j_1__ + 1;
             param_names__.push_back(param_name_stream__.str());
         }
         size_t beta_ind_j_1_max__ = N_person;
@@ -675,10 +675,10 @@ public:
                                    bool include_tparams__ = true,
                                    bool include_gqs__ = true) const {
         std::stringstream param_name_stream__;
-        size_t beta_common_j_1_max__ = D_common;
-        for (size_t j_1__ = 0; j_1__ < beta_common_j_1_max__; ++j_1__) {
+        size_t beta_j_1_max__ = D_common;
+        for (size_t j_1__ = 0; j_1__ < beta_j_1_max__; ++j_1__) {
             param_name_stream__.str(std::string());
-            param_name_stream__ << "beta_common" << '.' << j_1__ + 1;
+            param_name_stream__ << "beta" << '.' << j_1__ + 1;
             param_names__.push_back(param_name_stream__.str());
         }
         size_t beta_ind_j_1_max__ = N_person;
