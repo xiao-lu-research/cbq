@@ -54,6 +54,8 @@ studies and I will refrain from interpreting the results (see [Lu
 This, however, should not matter so much for our pedagogical purpose of
 showing how we can use the package. Now, let us get started.
 
+[check [here](https://www.xiao-lu.com/files/cbq_demo.html) for the full page of the demo (including plots).]
+
 Package loading and introduction of datasets
 --------------------------------------------
 
