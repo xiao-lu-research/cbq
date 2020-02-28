@@ -11,7 +11,7 @@ Caution: The package is still under initial development and there is no guarante
 # Make sure that the following packages have been installed in your local R environment
 if(!require(rstan)) install.packages("rstan")
 
-# Install cirque from github
+# Install cbq from github
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("xiao-lu-research/cbq")
 ```
