@@ -1,5 +1,7 @@
 # cbq: An R Package for Conditional Binary Quantile Models
 
+https://www.r-pkg.org/badges/version/cbq https://www.r-pkg.org/badges/last-release/cbq http://cranlogs.r-pkg.org/badges/grand-total/cbq
+
 
 Introduction
 ------------
