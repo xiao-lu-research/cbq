@@ -3,7 +3,7 @@
 [![Build Status](https://www.r-pkg.org/badges/version/cbq)](https://www.r-pkg.org/badges/version/cbq)
 [![Build Status](https://www.r-pkg.org/badges/last-release/cbq)](https://www.r-pkg.org/badges/last-release/cbq)
 [![Build Status](http://cranlogs.r-pkg.org/badges/grand-total/cbq)](http://cranlogs.r-pkg.org/badges/grand-total/cbq)
-[![DOI](https://doi.org/10.1017/pan.2019.29)](https://doi.org/10.1017/pan.2019.29)
+
 Introduction
 ------------
 
@@ -19,12 +19,12 @@ CBQ models are developed to solve this problem by introducing a
 conditional multinomial structure for modeling varying choice
 alternatives. Even though the CBQ models are called "binary", they
 actually belong to a more general family of dicrete choice models. I
-refer the readers to [Lu (2019)](https://doi.org/10.1017/pan.2019.29)
+refer the readers to [Lu (2020)](https://doi.org/10.1017/pan.2019.29)
 for the details of the estimation.
 
 This demo page is intended to introduce an R package named `cbq`
 associated with the CBQ models. Compared to the original version in [Lu
-(2019)](https://doi.org/10.1017/pan.2019.29), the package additionally
+(2020)](https://doi.org/10.1017/pan.2019.29), the package additionally
 enables estimation of mixed effects (including both random and fixed
 effects) in the CBQ models and allows for more flexible specifications
 that can be determiend by the users of the package. Since the package
@@ -53,7 +53,7 @@ following examples are only subsets of data used in the original studies
 and only one chain has been specified to sample the model. Therefore,
 the estimates do not necessarily reflect the results of the original
 studies and I will refrain from interpreting the results (see [Lu
-(2019)](https://doi.org/10.1017/pan.2019.29) for the full estimations).
+(2020)](https://doi.org/10.1017/pan.2019.29) for the full estimations).
 This, however, should not matter so much for our pedagogical purpose of
 showing how we can use the package. Now, let us get started.
 
@@ -905,5 +905,5 @@ functions of the package, which can be further extended in the updated
 versions. Some details of the functions, such as naming of the
 variables, will be refined in the renewed version. For the
 interpretation and additional visualization of the results, you can
-check [Lu (2019)](https://doi.org/10.1017/pan.2019.29) and other related
+check [Lu (2020)](https://doi.org/10.1017/pan.2019.29) and other related
 works.
