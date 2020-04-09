@@ -3,7 +3,7 @@
 [![Build Status](https://www.r-pkg.org/badges/version/cbq)](https://www.r-pkg.org/badges/version/cbq)
 [![Build Status](https://www.r-pkg.org/badges/last-release/cbq)](https://www.r-pkg.org/badges/last-release/cbq)
 [![Build Status](http://cranlogs.r-pkg.org/badges/grand-total/cbq)](http://cranlogs.r-pkg.org/badges/grand-total/cbq)
-
+[![DOI](https://doi.org/10.1017/pan.2019.29)](https://doi.org/10.1017/pan.2019.29)
 Introduction
 ------------
 
