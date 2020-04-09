@@ -5,11 +5,11 @@
 #'
 #' @param x A \code{cbq} object to be plotted.
 #' @param type Character string giving the type of plotting. The options are
-#'   \code{"trace"} for trace plots, \code{"coef"} for coefficient plots.
+#'   \code{"trace"} for trace plots, \code{"coef"} for coefficient plots. The default is the traceplot.
 #' @param ... Additional arguments to be passed to subsequent plot functions.
 #'
 #' @export
-#'
+#' @return None.
 #'
 #'
 plot.cbq <- function(x, type = "trace", ...) {
@@ -24,13 +24,14 @@ plot.cbq <- function(x, type = "trace", ...) {
 #' Plot traceplots from a \code{cbq} object.
 #'
 #' @param object A \code{cbq} object.
-#' @param ... Additional parameters to be passed.
+#' @param ... Additional parameters to be passed to the traceplot function.
 #'
 #' @export
-#'
+#' @return None.
 #'
 #'
 plot_trace.cbq <- function(object, ...) {
+  names(object$stanfit)[1:object$npars] <- object$xnames
   rstan::traceplot(object$stanfit, ...)
 }
 
@@ -39,12 +40,13 @@ plot_trace.cbq <- function(object, ...) {
 #' Plot traceplots from a \code{cbq} object.
 #'
 #' @param object A \code{cbq} object.
-#' @param ... Additional parameters to be passed.
+#' @param ... Additional parameters to be passed to the plot function.
 #'
 #' @export
-#'
+#' @return None.
 #'
 #'
 plot_coef.cbq <- function(object, ...) {
+  names(object$stanfit)[1:object$npars] <- object$xnames
   rstan::plot(object$stanfit, ...)
 }

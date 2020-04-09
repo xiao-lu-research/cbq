@@ -38,8 +38,6 @@ is.dichotomous <- function(x) {
 #' @param formula An object of class "Formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
 #' @param data A data frame containing the variables in the model.
 #' @param q The quantile value.
-#' @param fixed_var Variable of fixed intercepts.
-#' @param random_var Variable of random intercepts.
 #' @param vi Indicating whether variantional inference should be used instead of MCMC sampling procedure.
 #' @param nsim The number of iterations.
 #' @param grad_samples Passed to \code{\link[rstan]{vb}} (positive integer), the number of samples for Monte Carlo estimate of gradients, defaulting to 1.
@@ -53,6 +51,7 @@ is.dichotomous <- function(x) {
 #' @param seeds Random seeds to replicate the results.
 #' @param inverse_distr If FALSE, the ALD will not be reversed. The default is FALSE.
 #' @param offset Offset values to enhance sampling stability. The default value is 1e-20.
+#' @param mc_core Indicating whether the estimation will be run in multiple parallel chains. The default is TRUE.
 #'
 #' @return A \code{cbq} object, which can be further analyzed with its associated \code{\link{plot.cbq}}, \code{\link{coef.cbq}} and \code{\link{print.cbq}} functions.
 #'
@@ -78,6 +77,11 @@ is.dichotomous <- function(x) {
 #'   \item{\code{npars}}{Number of covariates.}
 #'   \item{\code{ulbs}}{Lower and upper confidence bounds.}
 #'   \item{\code{means}}{Estimates at the mean.}
+#'   \item{\code{vi}}{Indicating whether variational inference has been performed.}
+#'   \item{\code{output_samples}}{Sample outputs.}
+#'   \item{\code{fixed_var}}{Variables estimated using fixed effects.}
+#'   \item{\code{random_var}}{Variables estimated using random effects.}
+#'   \item{\code{xq}}{Variables indicating the choice sets.}
 #'
 #'
 #' }
@@ -100,7 +104,7 @@ is.dichotomous <- function(x) {
 #' dat <- as.data.frame(cbind(y, x))
 #'
 #' # Estimate the CBQ model
-#' model <- cbq(y ~ x, dat, 0.5, inverse_distr = FALSE, nsim = 1000)
+#' model <- cbq(y ~ x, dat, 0.5, nchain = 1, mc_core = FALSE)
 #'
 #' # Show the results
 #' print(model)
@@ -111,8 +115,6 @@ is.dichotomous <- function(x) {
 cbq <- function(formula,
                 data,
                 q = NULL,
-                fixed_var = NULL,
-                random_var = NULL,
                 vi = FALSE,
                 nsim = 1000,
                 grad_samples = 1,
@@ -125,7 +127,8 @@ cbq <- function(formula,
                 nchain = 1,
                 seeds = 12345,
                 inverse_distr = FALSE,
-                offset = 1e-20) {
+                offset = 1e-20,
+                mc_core = TRUE) {
   if (is.null(burnin))
     burnin <- floor(nsim / 2)
   if (burnin < 0)
@@ -149,18 +152,73 @@ cbq <- function(formula,
   if (q >= 1 |
       q <= 0)
     stop("The specified quantile is out of range. The value must be in (0,1).")
-
+    
+  old <- options(stringsAsFactors = FALSE)
+  if (mc_core == TRUE){
+        # activate multicore in stan
+        options(mc.cores = parallel::detectCores())
+    }
   f <- Formula::Formula(formula)
   data <- stats::model.frame(f, data)
   y <- c(as.matrix(stats::model.frame(f, data)[, 1]))
-
-  x = stats::model.matrix(f, data)
-  if (grepl("\\|", deparse(f))) {
-    xq <- as.matrix(stats::model.matrix(f, data, rhs = 2)[, -1])
-    nq <- dim(xq)[2]
+  if (length(f)[2] >= 2 ) {
+      xq <- as.matrix(stats::model.matrix(f, data, rhs = 2)[, -1])
+      nq <- dim(xq)[2]
   } else {
-    xq <- NULL
-    nq <- 0
+      xq <- NULL
+      nq <- 0
+  }
+  if (nq == 1) {
+      indx = as.integer(as.factor(c(xq)))
+      tmp = stats::aggregate(y, list(indx), sum)
+      if (any(tmp[, 2] != 1) == TRUE ) {
+          deleteids = which(indx %in% tmp[which(tmp[,2] != 1),1] )
+          data = data[-deleteids,]
+          warning(
+          "In each choice set, there must be only one chosen observation. Multiple 1s or all 0s are not allowed in any choice set. Problematic choice sets have been deleted."
+          )
+      }
+  }
+  if (length(f)[2] >= 2 ) {
+      xq <- as.matrix(stats::model.matrix(f, data, rhs = 2)[, -1])
+      nq <- dim(xq)[2]
+  } else {
+      xq <- NULL
+      nq <- 0
+  }
+  if (nq == 1) {
+      indx = as.integer(as.factor(c(xq)))
+  }
+  y <- c(as.matrix(stats::model.frame(f, data)[, 1]))
+  x = stats::model.matrix(f, data)
+  
+  fixed_var = NULL
+  random_var = NULL
+  if (length(f)[2] == 3 ) {
+      if (dim(as.matrix(stats::model.matrix(f, data, rhs = 3)[,-1]))[2] == 0 ) {
+          fixed_var = NULL
+      } else if (dim(as.matrix(stats::model.matrix(f, data, rhs = 3)[,-1]))[2] == 1 ) {
+          fixed_var = c(stats::model.matrix(f, data, rhs = 3)[,-1])
+      } else {
+          stop("Misspecified fixed intercepts!")
+      }
+  }
+  
+  if (length(f)[2] == 4 ) {
+      if (dim(as.matrix(stats::model.matrix(f, data, rhs = 3)[,-1]))[2] == 0 ) {
+          fixed_var = NULL
+      } else if (dim(as.matrix(stats::model.matrix(f, data, rhs = 3)[,-1]))[2] == 1 ) {
+          fixed_var = c(stats::model.matrix(f, data, rhs = 3)[,-1])
+      } else {
+          stop("Misspecified fixed intercepts!")
+      }
+      if (dim(as.matrix(stats::model.matrix(f, data, rhs = 4)[,-1]))[2] == 0 ) {
+          random_var = NULL
+      } else if (dim(as.matrix(stats::model.matrix(f, data, rhs = 4)[,-1]))[2] == 1 ) {
+          random_var = c(stats::model.matrix(f, data, rhs = 4)[,-1])
+      } else {
+          stop("Misspecified random intercepts!")
+      }
   }
 
   n_covariate <- dim(x)[2]
@@ -171,14 +229,7 @@ cbq <- function(formula,
   if (!is.dichotomous(y))
     stop("The dependent variable must be binary with values in {0,1}.")
 
-  if (nq == 1) {
-    indx = as.integer(as.factor(c(xq)))
-    if (!all(stats::aggregate(y, list(indx), sum)[, 2] == 1)) {
-      stop(
-        "In each choice set, there must be only one chosen observation. Multiple 1s or all 0s are not allowed in any choice set."
-      )
-    }
-  }
+  
   
   
   if (is.null(fixed_var) & is.null(random_var)){
@@ -491,6 +542,7 @@ cbq <- function(formula,
 
   summaryout <- rstan::summary(stanout)$summary
   sampledf <- as.data.frame(stanout)[, 1:n_covariate]
+  names(sampledf) <- colnames(x)
 
   out = list()
   class(out) <- c("cbq", class(out))
@@ -519,7 +571,7 @@ cbq <- function(formula,
   out$fixed_var <- fixed_var
   out$random_var <- random_var
   out$xq = xq
-
+  on.exit(options(old), add = TRUE)
   return(out)
 
 
