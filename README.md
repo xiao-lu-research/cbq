@@ -902,8 +902,14 @@ patterns:
 
 Finally, as a concluding remark, the above examples show the basic
 functions of the package, which can be further extended in the updated
-versions. Some details of the functions, such as naming of the
-variables, will be refined in the renewed version. For the
+versions. For the
 interpretation and additional visualization of the results, you can
 check [Lu (2020)](https://doi.org/10.1017/pan.2019.29) and other related
 works.
+
+------------------------------------------------------------------------
+
+Reference:
+
+Lu, Xiao. (2020). Discrete Choice Data with Unobserved Heterogeneity: A
+Conditional Binary Quantile Model. Political Analysis, 28(2), 147-167.
