@@ -22,7 +22,7 @@ functions{
     int jj;
     int res[group_size(ref, value)];
     if (size(ref) != size(y))
-      reject("illegal input")
+      reject("illegal input");
     jj = 1;
     for(ii in 1:size(ref)) {
       if (ref[ii] == value) {
