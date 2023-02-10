@@ -22,7 +22,7 @@ functions{
     int jj;
     int res[group_size(ref, value)];
     if (size(ref) != size(y))
-      reject("illegal input")
+      reject("illegal input");
     jj = 1;
     for(ii in 1:size(ref)) {
       if (ref[ii] == value) {
@@ -41,14 +41,14 @@ data {
 	int D_common;
 	vector<lower=-1,upper=1>[N] Y;
 	matrix[N,D_common] X_common;
-	int N_indx; 
-	int ind[N]; 
+	int N_indx;
+	int ind[N];
   real offset;
   real<lower = 0, upper = 1> q;
 }
 
 transformed data{
-  int n_group[N_indx]; 
+  int n_group[N_indx];
   for (ii in 1:N_indx) {
     n_group[ii] = group_size(ind, ii);
   }
@@ -67,7 +67,7 @@ model{
   for (i in 1:N){
   	xb_common[i] = X_common[i,]*beta;
   }
-  	
+
 	pos = 1;
   for (i in 1:N_indx){
       real lik0;
@@ -82,7 +82,7 @@ model{
   		xb_common_g = segment(xb_common,pos,n_group[i]);
 
   		lik = 1;
-  		for (j in 1:(n_group[i]-1) ){ 
+  		for (j in 1:(n_group[i]-1) ){
   			lik =	lik * (1 - pald2(-(xb_common_g[n_group[i]] - xb_common_g[j] ),q));
   		}
 

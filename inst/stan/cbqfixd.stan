@@ -19,13 +19,13 @@ return(prob);
         count = count + 1;
       return count;
   }
-  
+
   //## function to subset an integer array (return just those observations in a given group)
   int[] subset_intarray(int[] y, int[] ref, int value) {
     int jj;
     int res[group_size(ref, value)];
     if (size(ref) != size(y))
-      reject("illegal input: non-matching dimensions")
+      reject("illegal input: non-matching dimensions");
     jj = 1;
     for(ii in 1:size(ref)) {
       if (ref[ii] == value) {
@@ -73,25 +73,25 @@ parameters {
 }
 
 transformed parameters{
-	
+
 }
 
 model{
 	int pos;
 	vector[N] xb_common;
-  
+
   // sigma_beta_ind ~ cauchy(0,1);
 
 	beta ~ normal(0,10);
   // beta_ind ~ normal(0,sigma_beta_ind);
   beta_wave ~ normal(0,10);
 
-  
+
 
   	for (i in 1:N){
   		xb_common[i] = X_common[i,]*beta + beta_wave[wave[i]];
   	}
-  	
+
 	pos = 1;
 
   	for (i in 1:N_indx){
@@ -108,7 +108,7 @@ model{
   		xb_common_g = segment(xb_common,pos,n_group[i]);
 
   		lik = 1;
-  		for (j in 1:3 ){ 
+  		for (j in 1:3 ){
               //needs to order the data with the y==1 at the end of each choice set
   			lik =	lik * pald2((xb_common_g[n_group[i]] - xb_common_g[j] ),q);
   		}
