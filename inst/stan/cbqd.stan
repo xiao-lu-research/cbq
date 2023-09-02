@@ -9,7 +9,7 @@ functions{
     return(prob);
   }
 
-  int group_size(int[] ref, int value) {
+  int group_size(array[] int ref, int value) {
     int count;
     count = 0;
     for (ii in 1:size(ref))
@@ -18,11 +18,11 @@ functions{
       return count;
   }
 
-  int[] subset_intarray(int[] y, int[] ref, int value) {
+  array[] int subset_intarray(array[] int y, array[] int ref, int value) {
     int jj;
-    int res[group_size(ref, value)];
+    array[group_size(ref, value)] int res;
     if (size(ref) != size(y))
-      reject("illegal input")
+      reject("illegal input");
     jj = 1;
     for(ii in 1:size(ref)) {
       if (ref[ii] == value) {
@@ -42,13 +42,13 @@ data {
 	vector<lower=-1,upper=1>[N] Y;
 	matrix[N,D_common] X_common;
 	int N_indx; 
-	int ind[N]; 
-  real offset;
+	array[N] int ind; 
+  real input_offset;
   real<lower = 0, upper = 1> q;
 }
 
 transformed data{
-  int n_group[N_indx]; 
+  array[N_indx] int n_group; 
   for (ii in 1:N_indx) {
     n_group[ii] = group_size(ind, ii);
   }
@@ -97,7 +97,7 @@ model{
         lik3 = lik3*(1-lik0);
       }
 
-     	lik2 = rising_factorial(n_group[i],0) * (lik+offset) * lik3;
+     	lik2 = rising_factorial(n_group[i],0) * (lik+input_offset) * lik3;
      	target += log(lik2);
      	pos = pos + n_group[i];
   }

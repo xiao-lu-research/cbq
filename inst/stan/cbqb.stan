@@ -15,7 +15,7 @@ data {
   int D;
   vector<lower=-1,upper=1>[N] Y;
   matrix[N,D] X; 
-  real offset;
+  real input_offset;
   real<lower = 0, upper = 1> q;
 }
 
@@ -32,10 +32,10 @@ model{
 
   for (i in 1:N){
     if (Y[i] == 1){
-      lik = pald2((dot_product(X[i,],beta)),q) + offset;  
+      lik = pald2((dot_product(X[i,],beta)),q) + input_offset;  
     }
     if (Y[i] == 0){
-      lik = 1 - pald2((dot_product(X[i,],beta)),q) + offset;  
+      lik = 1 - pald2((dot_product(X[i,],beta)),q) + input_offset;  
     }
     target += log(lik);
   }
