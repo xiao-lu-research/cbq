@@ -11,7 +11,7 @@ return(prob);
 }
 
 //## function to return the number of observations in a group
-  int group_size(int[] ref, int value) {
+  int group_size(array[] int ref, int value) {
     int count;
     count = 0;
     for (ii in 1:size(ref))
@@ -21,11 +21,11 @@ return(prob);
   }
   
   //## function to subset an integer array (return just those observations in a given group)
-  int[] subset_intarray(int[] y, int[] ref, int value) {
+  array[] int subset_intarray(array[] int y, array[] int ref, int value) {
     int jj;
-    int res[group_size(ref, value)];
+    array[group_size(ref, value)] int res;
     if (size(ref) != size(y))
-      reject("illegal input: non-matching dimensions")
+      reject("illegal input: non-matching dimensions");
     jj = 1;
     for(ii in 1:size(ref)) {
       if (ref[ii] == value) {
@@ -48,17 +48,17 @@ data {
 	vector<lower=-1,upper=1>[N] Y; //# data of choices y = 0 -> -1, y = 1 -> 1
 	matrix[N,D_common] X_common; //# common covariates
 	int N_indx; //# number of groups
-	int ind[N]; //# group index
+	array[N] int ind; //# group index
   int N_person; // number of individuals
-  int person[N]; // person index
+  array[N] int person; // person index
   int N_wave; // number of waves
-  int wave[N];// wave index
+  array[N] int wave;// wave index
   real q; // quantile
-  real offset;
+  real input_offset;
 }
 
 transformed data{
-  int n_group[N_indx]; //# number of observations in the group
+  array[N_indx] int n_group; //# number of observations in the group
   for (ii in 1:N_indx) {
     n_group[ii] = group_size(ind, ii);
   }
@@ -124,7 +124,7 @@ model{
         lik3 = lik3*(1-lik0);
       }
 
-      lik2 = (lik + offset) * lik3;
+      lik2 = (lik + input_offset) * lik3;
 
      	target += log(lik2);
      	pos = pos + n_group[i];

@@ -16,8 +16,8 @@ data {
   vector<lower=-1,upper=1>[N] Y;
   matrix[N,D] X; 
   int N_person; // number of individuals
-  int person[N]; // person index
-  real offset;
+  array[N] int person; // person index
+  real input_offset;
   real<lower = 0, upper = 1> q;
 }
 
@@ -36,10 +36,10 @@ model{
 
   for (i in 1:N){
     if (Y[i] == 1){
-      lik = pald2((dot_product(X[i,],beta) + beta_ind[person[i]] ),q) + offset;  
+      lik = pald2((dot_product(X[i,],beta) + beta_ind[person[i]] ),q) + input_offset;  
     }
     if (Y[i] == 0){
-      lik = 1 - pald2((dot_product(X[i,],beta) + beta_ind[person[i]] ),q) + offset;  
+      lik = 1 - pald2((dot_product(X[i,],beta) + beta_ind[person[i]] ),q) + input_offset;  
     }
     target += log(lik);
   }

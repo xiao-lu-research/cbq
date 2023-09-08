@@ -268,7 +268,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset
+            input_offset = offset
             )
         } else if (type == "random") {
             stanmodel = stanmodels$cbqrandombv
@@ -278,7 +278,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var
             )
@@ -290,7 +290,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var
             )
@@ -302,7 +302,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var,
             N_person = length(unique(random_var)),
@@ -318,7 +318,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset
+            input_offset = offset
             )
         } else if (type == "random") {
             stanmodel = stanmodels$cbqrandomb
@@ -328,7 +328,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var
             )
@@ -340,7 +340,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var
             )
@@ -352,7 +352,7 @@ cbq <- function(formula,
             D = n_covariate,
             X = x,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var,
             N_person = length(unique(random_var)),
@@ -374,7 +374,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset
+            input_offset = offset
             )
         } else if (type == "random") {
             x <- x[order(indx, y), ]
@@ -389,7 +389,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var
             )
@@ -406,7 +406,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var
             )
@@ -424,7 +424,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var,
             N_wave = length(unique(fixed_var)),
@@ -445,7 +445,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset
+            input_offset = offset
             )
         } else if (type == "random") {
             x <- x[order(indx, y), ]
@@ -460,7 +460,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var
             )
@@ -477,7 +477,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_wave = length(unique(fixed_var)),
             wave = fixed_var
             )
@@ -495,7 +495,7 @@ cbq <- function(formula,
             N_indx = length(unique(indx)),
             ind = indx,
             q = q,
-            offset = offset,
+            input_offset = offset,
             N_person = length(unique(random_var)),
             person = random_var,
             N_wave = length(unique(fixed_var)),

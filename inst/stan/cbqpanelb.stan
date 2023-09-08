@@ -15,12 +15,12 @@ data {
   int D;
   vector<lower=-1,upper=1>[N] Y;
   matrix[N,D] X; 
-  real offset;
+  real input_offset;
   real<lower = 0, upper = 1> q;
   int N_person; // number of individuals
-  int person[N]; // person index
+  array[N] int person; // person index
   int N_wave; // number of waves
-  int wave[N];// wave index
+  array[N] int wave;// wave index
 }
 
 
@@ -42,10 +42,10 @@ model{
 
   for (i in 1:N){
     if (Y[i] == 1){
-      lik = pald2((dot_product(X[i,],beta) + beta_ind[person[i]] + beta_wave[wave[i]]),q) + offset;  
+      lik = pald2((dot_product(X[i,],beta) + beta_ind[person[i]] + beta_wave[wave[i]]),q) + input_offset;  
     }
     if (Y[i] == 0){
-      lik = 1 - pald2((dot_product(X[i,],beta) + beta_ind[person[i]] + beta_wave[wave[i]]),q) + offset;  
+      lik = 1 - pald2((dot_product(X[i,],beta) + beta_ind[person[i]] + beta_wave[wave[i]]),q) + input_offset;  
     }
     target += log(lik);
   }
